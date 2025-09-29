@@ -1,0 +1,14 @@
+.Me {
+    background-color: #6b6b6b;
+    position: relative;
+    top: 10%;
+    left: 21.5%;
+    width: 1000px;
+    height: 150px;
+    padding: 100px 1px 10px 100px;
+    z-index: 2;  
+    font-family:'Times New Roman';
+    color: White;
+    text-align: center;   
+    align-content: center;   
+}
