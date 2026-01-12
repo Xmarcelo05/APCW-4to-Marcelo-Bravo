@@ -1,6 +1,8 @@
 /* =========================================
    1. VARIABLES Y ESTILOS GLOBALES
    ========================================= */
+
+
 :root {
   --primary: #004AAD;
   --primary-dark: #003580;
@@ -27,8 +29,11 @@ body {
   position: relative;
 }
 
-/* Imagen de Fondo (Corregida la ruta para SvelteKit) */
+
 body::before {
+  font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
   content: '';
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;

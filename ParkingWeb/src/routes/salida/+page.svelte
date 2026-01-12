@@ -258,7 +258,7 @@
 {/if}
 
 <style>
-    /* Si tienes estilos específicos de Salida.css que no son globales, pégalos aquí */
+
     .resultado-salida {
         border-left: 5px solid #dc3545;
         padding-left: 15px;

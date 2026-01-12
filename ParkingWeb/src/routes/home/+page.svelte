@@ -1,6 +1,12 @@
 <script>
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
+
+    onMount(() => {
+    const usuario = localStorage.getItem('usuarioActual');
+    if (!usuario) {
+      goto('/', { replaceState: true });
+    }});
     
     // 1. ESTADO REACTIVO (Reemplaza variables globales y document.getElementById)
     
@@ -100,10 +106,13 @@
       mostrarModalRegistro = true; // Svelte muestra el modal al cambiar esta variable
     }
     
-    // Navegación (reemplaza window.location.href)
+    
     function cerrarSesion() {
-        // Podrías limpiar localStorage aquí si fuera necesario
-        goto('/'); // Redirige a la página de Login
+      // Borramos los datos del usuario
+      localStorage.removeItem('usuarioActual');
+      // Redirigimos al login reemplazando el historial
+      // replaceState: true hace que el navegador olvide que estuviste en el Home
+      goto('/', { replaceState: true });
     }
 
     function irAIngreso() {
@@ -119,6 +128,8 @@
       cargarDatosGuardados(); // Carga los datos al iniciar la página
       // Svelte no necesita listeners extra para los botones, se manejan con on:click
     });
+
+    
     
 </script>
 
@@ -200,6 +211,5 @@
 {/if}
 
 <style>
-    /* Si tienes estilos específicos de Home.css que no son globales, pégalos aquí */
-    /* Ej: estilos para .left-panel, .map-container, etc. */
+
 </style>

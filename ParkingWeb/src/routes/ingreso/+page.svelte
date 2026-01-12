@@ -264,5 +264,5 @@
 {/if}
 
 <style>
-    /* Asegúrate de que los estilos para .plaza, .ocupada, .modal, etc., estén en src/app.css */
+
 </style>
