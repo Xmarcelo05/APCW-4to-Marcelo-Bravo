@@ -1,8 +1,4 @@
-/* =========================================
-   1. VARIABLES Y ESTILOS GLOBALES
-   ========================================= */
-
-
+/* 1. VARIABLES Y ESTILOS GLOBALES */
 :root {
   --primary: #004AAD;
   --primary-dark: #003580;
@@ -37,7 +33,6 @@ body::before {
   content: '';
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
-  background-image: url('/Imagenes/FondoUleam.jpg'); /* Ruta corregida */
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -46,14 +41,12 @@ body::before {
   z-index: -1;
 }
 
-/* =========================================
-   2. CONTENEDORES Y LAYOUT
-   ========================================= */
+/* 2. CONTENEDORES Y LAYOUT */
 .container {
   max-width: 1280px;
   margin: 30px auto;
   padding: 30px;
-  background: rgba(255, 255, 255, 0.95); /* Efecto semi-transparente */
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
   box-shadow: var(--shadow);
   backdrop-filter: blur(5px);
@@ -115,26 +108,22 @@ header h1 { font-size: 1.75rem; font-weight: 600; letter-spacing: 0.5px; }
   .map-container { order: 1; }
 }
 
-/* =========================================
-   3. MAPA Y PLAZAS (Estacionamiento)
-   ========================================= */
+/* 3. MAPA Y PLAZAS (Estacionamiento) */
 .map-container {
-  /* Quitamos 'flex: 1' para que no intente estirarse verticalmente si sobra espacio */
   position: relative;
   width: 100%; /* Ocupa todo el ancho disponible */
-  /* ¡IMPORTANTE! Quitamos min-height y height fijas. La altura la definirá la imagen. */
   border-radius: 12px;
   overflow: hidden;
   background: #1f2937; /* Fondo oscuro por si la imagen tarda en cargar */
   box-shadow: var(--shadow);
-  /* Esto asegura que el contenedor abrace exactamente a la imagen */
+  /* El contenedor del mapa se ajusta al tamaño de la imagen */
   display: flex; 
   align-items: flex-start;
 }
 
 .map-container img {
-  width: 100%;      /* Ancho total del contenedor */
-  height: auto;     /* ¡CLAVE! La altura se calcula sola según la proporción de la imagen */
+  width: 100%;      
+  height: auto;     /* La altura se calcula sola según la proporción de la imagen */
   display: block;   /* Evita un pequeño espacio blanco debajo de la imagen */
   object-fit: contain; /* Asegura que la imagen nunca se recorte */
 }
@@ -143,7 +132,6 @@ header h1 { font-size: 1.75rem; font-weight: 600; letter-spacing: 0.5px; }
   position: absolute;
   inset: 0;         /* Se pega a los 4 bordes del contenedor */
   pointer-events: none;
-  /* El overlay ahora coincidirá exactamente con el tamaño de la imagen */
 }
 
 .plaza {
@@ -162,7 +150,7 @@ header h1 { font-size: 1.75rem; font-weight: 600; letter-spacing: 0.5px; }
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   user-select: none;
   border: 1px solid rgba(255,255,255,0.3);
-  /* Aseguramos que el cálculo de porcentajes sea preciso */
+  /* Para evitar que el contenido se extienda más allá del borde */
   box-sizing: border-box; 
 }
 
@@ -176,9 +164,7 @@ header h1 { font-size: 1.75rem; font-weight: 600; letter-spacing: 0.5px; }
   background: linear-gradient(135deg, var(--danger) 0%, var(--danger-dark) 100%);
 }
 
-/* =========================================
-   4. BOTONES
-   ========================================= */
+/* 4. BOTONES */
 /* Botón Base */
 button, .btn {
   display: inline-flex;
@@ -213,7 +199,7 @@ button:active, .btn:active { transform: translateY(0); }
 }
 .btn.small:hover { background: #f9fafb; border-color: var(--text-muted); }
 
-/* Botones Grandes del Home (específico para .buttons-row) */
+/* Botones Grandes del Home */
 .buttons-row {
   display: flex;
   gap: 16px;
@@ -240,9 +226,7 @@ button:active, .btn:active { transform: translateY(0); }
 }
 .footer-buttons button { flex: 1; }
 
-/* =========================================
-   5. MODALES Y TABLAS
-   ========================================= */
+/* 5. MODALES Y TABLAS */
 .modal {
   position: fixed; inset: 0;
   display: flex; align-items: center; justify-content: center;
@@ -280,9 +264,7 @@ th { background: var(--primary); color: #fff; text-align: left; padding: 12px; }
 td { padding: 12px; border-bottom: 1px solid #eee; }
 tr:hover { background: #f9fafb; }
 
-/* =========================================
-   6. FORMULARIOS (Login, Registro, Modales)
-   ========================================= */
+/* 6. FORMULARIOS (Login, Registro, Modales) */
 form { display: flex; flex-direction: column; gap: 15px; }
 
 label { font-size: 0.9rem; font-weight: 500; margin-bottom: 4px; display: block; }
@@ -305,7 +287,7 @@ input:focus {
 /* Estilos Específicos del Login (Tarjetas) */
 .login-wrapper {
   display: flex; justify-content: center; align-items: center;
-  min-height: 80vh; /* Centrado vertical */
+  min-height: 80vh;
 }
 
 .card {

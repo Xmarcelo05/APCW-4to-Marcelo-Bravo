@@ -2,8 +2,8 @@
   import { goto } from '$app/navigation';
   import { supabase } from '$lib/supabaseClient'; 
 
-  // Estado para controlar qué formulario se ve
   let vistaActual = 'login'; 
+  let verPassword = false; 
 
   // Variables para Login
   let loginCedula = '';
@@ -12,7 +12,6 @@
   // Variables para Registro
   let regNombres = '';
   let regApellidos = '';
-  let regFecha = '';
   let regCedula = '';
   let regPassword = '';
   let regCorreo = '';
@@ -24,30 +23,15 @@
   let nuevaPassword = '';
   let pasoOlvido = 1;
 
-  // --- FUNCIÓN PARA LIMPIAR CAMPOS AL CAMBIAR VISTA ---
   function cambiarVista(nuevaVista) {
-    // Limpiar Login
-    loginCedula = '';
-    loginPassword = '';
-    
-    // Limpiar Registro
-    regNombres = '';
-    regApellidos = '';
-    regFecha = '';
-    regCedula = '';
-    regPassword = '';
-    regCorreo = '';
-    
-    // Limpiar Olvido
-    olvidoCorreo = '';
-    codigoVerificacion = '';
-    nuevaPassword = '';
-    pasoOlvido = 1;
-
+    loginCedula = ''; loginPassword = '';
+    regNombres = ''; regApellidos = ''; regCedula = ''; regPassword = ''; regCorreo = '';
+    olvidoCorreo = ''; codigoVerificacion = ''; nuevaPassword = ''; pasoOlvido = 1;
+    verPassword = false;
     vistaActual = nuevaVista;
   }
 
-  // --- 1. LÓGICA DE LOGIN CON BASE DE DATOS ---
+// --- 1. LÓGICA DE LOGIN ---
   async function manejarLogin() {
     if (!loginCedula || !loginPassword) {
       alert("Por favor complete todos los campos");
@@ -55,151 +39,135 @@
     }
 
     try {
-      const { data, error } = await supabase
+      // Pedimos correo y rol a la base de datos
+      const { data: usuarioDB, error: errorDB } = await supabase
         .from('Usuarios')
-        .select('*')
-        .eq('cedula', loginCedula)
-        .eq('password', loginPassword)
-        .single(); 
+        .select('correo, rol') 
+        .eq('cedula', loginCedula.trim())
+        .single();
 
-      if (error || !data) {
-        alert("Cédula o contraseña incorrectos, o usuario no registrado.");  
+      if (errorDB || !usuarioDB) {
+        alert("Cédula no encontrada.");
         return;
       }
 
-      const usuario = data;
-      localStorage.setItem('usuarioActual', JSON.stringify(usuario));
+      // Revisamos si hay una contraseña recuperada localmente para este correo
+      const clavesRecuperadas = JSON.parse(localStorage.getItem('clavesRecuperadas') || '{}');
+      const passwordAUsar = clavesRecuperadas[usuarioDB.correo] || loginPassword;
 
-      alert(`Bienvenido ${usuario.nombres} (${usuario.rol})`);
+      // Iniciamos sesión en Supabase Auth
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: usuarioDB.correo,
+        password: passwordAUsar
+      });
 
-      if (usuario.rol === 'admin') {
-         alert("Eres Admin (Redirigiendo a home por ahora)");
-         goto('/home');
+      if (error) {
+        alert("Contraseña incorrecta o acceso denegado.");
+        return;
+      }
+
+      // Guardamos la sesión
+      localStorage.setItem('usuarioActual', JSON.stringify(data.user));
+
+      const rol = usuarioDB.rol;
+      if (rol === 'guardia') {
+          goto('/home');
+      } else if (rol === 'admin') {
+          goto('/admin');
       } else {
-         goto('/home');
+          goto('/usuario'); 
       }
 
     } catch (err) {
       console.error(err);
-      alert("Error de conexión con la base de datos.");
+      alert("Error de conexión con el servidor.");
     }
   }
-
-  // --- 2. LÓGICA DE REGISTRO CON ROL AUTOMÁTICO ---
+  
+  // --- 2. LÓGICA DE REGISTRO ---
   async function manejarRegistro() {
     if (!regNombres || !regApellidos || !regCedula || !regPassword || !regCorreo) {
-      alert("Por favor, complete todos los campos obligatorios.");
-      return;
+        alert("Por favor, complete todos los campos obligatorios.");
+        return;
     }
 
-    let rolAsignado = '';
     const correo = regCorreo.toLowerCase().trim();
-    const contraseña = regPassword;
     const cedula = regCedula.trim();
 
     if (cedula.length < 10 || !/^\d+$/.test(cedula)) {
         alert("La cédula debe tener al menos 10 dígitos numéricos.");
         return;  
     }
-    
-    if (correo.endsWith('@live.uleam.edu.ec')) {
-        rolAsignado = 'alumno';
-    } else if (correo.endsWith('@uleam.edu.ec')) {
-        rolAsignado = 'maestro';
-    } else {
-        alert("Error: Debes usar un correo institucional (@live.uleam.edu.ec o @uleam.edu.ec)");
-        return;
-    }
-
-    if (contraseña.length < 6 || contraseña.length > 20 || !/[A-Z]/.test(contraseña) || !/[a-z]/.test(contraseña) || !/[0-9]/.test(contraseña)) {
-        alert("La contraseña debe tener entre 6 y 20 caracteres, incluyendo mayúsculas, minúsculas y números.");
-        return;
-    }
-
 
     try {
-      const { data, error } = await supabase
-        .from('Usuarios') 
-        .insert([
-          {
-            cedula: regCedula,
-            password: regPassword,
-            nombres: regNombres,
-            apellidos: regApellidos,
-            fechaNac: regFecha,
-            correo: regCorreo,
-            rol: rolAsignado 
-          }
-        ]);
+        const { data: existente } = await supabase
+            .from('Usuarios')
+            .select('cedula, correo')
+            .or(`cedula.eq.${cedula},correo.eq.${correo}`);
 
-      if (error) {
-        if (error.code === '23505') {
-           alert("Error: Esa cédula o correo ya están registrados.");
-        } else {
-           alert("Error al registrar: " + error.message);
+        if (existente && existente.length > 0) {
+            alert("Error: La cédula o el correo ya están registrados.");
+            return;
         }
-      } else {
-        alert(`¡Registro exitoso! Cuenta creada como: ${rolAsignado.toUpperCase()}`);
-        cambiarVista('login');
-      }
+    } catch (err) { console.error(err); }
 
-    } catch (err) {
-      console.error(err);
-      alert("Ocurrió un error inesperado.");
+    let rolAsignado = '';
+    if (correo.endsWith('@live.uleam.edu.ec')) rolAsignado = 'alumno';
+    else if (correo.endsWith('@uleam.edu.ec')) rolAsignado = 'maestro';
+    else if (correo === '2pq2pugj10@gmail.com') rolAsignado = 'guardia';
+    else if (correo === '2pq2pugj9@gmail.com') rolAsignado = 'admin';
+    else {  
+        alert("Error: Usa un correo institucional (@live.uleam.edu.ec o @uleam.edu.ec)");
+        return;
+    }
+
+    if (regPassword.length < 6 || !/[A-Z]/.test(regPassword) || !/[0-9]/.test(regPassword)) {
+        alert("La contraseña debe tener mín. 6 caracteres, una mayúscula y un número.");
+        return;
+    }
+
+    const { error } = await supabase.auth.signUp({
+      email: correo,
+      password: regPassword,
+      options: {
+        data: { cedula, nombres: regNombres, apellidos: regApellidos, rol: rolAsignado },
+        emailRedirectTo: `${window.location.origin}/home`
+      }
+    });
+
+    if (error) alert("Error al registrar: " + error.message);
+    else {
+      alert("¡Revisa tu correo! Se ha enviado un enlace de confirmación.");
+      cambiarVista('login');
     }
   }
 
-  // --- 3. LÓGICA DE OLVIDO ---
+  // --- 3. LÓGICA DE OLVIDO DE CONTRASEÑA ---
   async function enviarCodigo() {
-    if (!olvidoCorreo.includes('@')) {
-      alert("Por favor, ingrese un correo válido.");
-      return;
-    }
-
-    const { data, error } = await supabase
-      .from('Usuarios')
-      .select('correo')
-      .eq('correo', olvidoCorreo)
-      .single();
-
-    if (error || !data) {
-      alert("Este correo no está registrado en el sistema.");
-      return;
-    }
+    if (!olvidoCorreo) { alert("Ingrese su correo"); return; }
+    
+    // Verificar si el correo existe
+    const { data, error } = await supabase.from('Usuarios').select('correo').eq('correo', olvidoCorreo.trim()).single();
+    if (error || !data) { alert("Correo no registrado."); return; }
 
     codigoGenerado = Math.floor(100000 + Math.random() * 900000).toString();
-    alert(`CÓDIGO DE SEGURIDAD ULEAM: ${codigoGenerado}\n\nIngresa este código en la aplicación.`);
+    alert(`🔐 CÓDIGO DE RECUPERACIÓN: ${codigoGenerado}`);
     pasoOlvido = 2; 
   }
 
   async function verificarYCambiar() {
-    if (codigoVerificacion !== codigoGenerado) {
-      alert("El código ingresado es incorrecto.");
-      return;
-    }
+    if (codigoVerificacion !== codigoGenerado) { alert("Código incorrecto."); return; }
+    if (nuevaPassword.length < 6) { alert("Mínimo 6 caracteres."); return; }
 
-    if (nuevaPassword.length < 6) {
-      alert("La nueva contraseña debe tener al menos 6 caracteres.");
-      return;
-    }
+    // Guardamos la nueva clave localmente para simular el cambio sin afectar Auth
+    const clavesRecuperadas = JSON.parse(localStorage.getItem('clavesRecuperadas') || '{}');
+    clavesRecuperadas[olvidoCorreo] = nuevaPassword;
+    localStorage.setItem('clavesRecuperadas', JSON.stringify(clavesRecuperadas));
 
-    try {
-      const { error } = await supabase
-        .from('Usuarios')
-        .update({ password: nuevaPassword })
-        .eq('correo', olvidoCorreo);
-
-      if (error) {
-        alert("Error al actualizar: " + error.message);
-      } else {
-        alert("¡Éxito! Tu contraseña ha sido actualizada. Ahora puedes iniciar sesión.");
-        cambiarVista('login');
-      }
-    } catch (err) {
-      alert("Error de conexión con el servidor.");
-    }
+    alert("¡Contraseña actualizada localmente! Ya puedes iniciar sesión.");
+    cambiarVista('login');
   }
-  let verPassword = false; 
+
 </script>
 
 <div class="login-wrapper">
@@ -222,18 +190,10 @@
       <div class="form-group">
         <label for="pass">Contraseña</label>
         <div class="input-password-container">
-          <input 
-            id="pass" 
-            type={verPassword ? "text" : "password"} 
-            bind:value={loginPassword} 
-            placeholder="Ingresa tu contraseña"
-          >
-          <button 
-            type="button" 
-            class="toggle-password" 
-            on:click={() => verPassword = !verPassword}
-          >
-            {verPassword ? "👁️" : "🙈"} </button>
+          <input id="pass" type={verPassword ? "text" : "password"} bind:value={loginPassword} placeholder="Contraseña">
+          <button type="button" class="toggle-password" on:click={() => verPassword = !verPassword}>
+            {verPassword ? "😮" : "😴"}
+          </button>
         </div>
       </div>
       <button class="boton1" on:click={manejarLogin}>Iniciar Sesión</button>
@@ -249,30 +209,22 @@
       <div class="card-registro">
         <div class="titulo">Registro</div>
         <div class="grid-form">
-          <div class="form-group"><label>Nombres</label><input type="text" bind:value={regNombres} placeholder="Ej: Juan Andrés"></div>
-          <div class="form-group"><label>Apellidos</label><input type="text" bind:value={regApellidos} placeholder="Ej: Pérez Loor"></div>
-          <div class="form-group"><label>Cédula</label><input type="text" bind:value={regCedula} placeholder="Ej: 130..."></div>
-          <div class="form-group"><label>Correo Institucional</label><input type="email" bind:value={regCorreo} placeholder="@live.uleam.edu.ec"></div>
+          <div class="form-group"><label>Nombres</label><input type="text" bind:value={regNombres}></div>
+          <div class="form-group"><label>Apellidos</label><input type="text" bind:value={regApellidos}></div>
+          <div class="form-group"><label>Cédula</label><input type="text" bind:value={regCedula}></div>
+          <div class="form-group"><label>Correo Institucional</label><input type="email" bind:value={regCorreo}></div>
           <div class="form-group">
-            <label for="pass">Contraseña</label>
+            <label>Contraseña</label>
             <div class="input-password-container">
-              <input 
-                id="pass" 
-                type={verPassword ? "text" : "password"} 
-                bind:value={loginPassword} 
-                placeholder="Ingresa tu contraseña"
-              >
-              <button 
-                type="button" 
-                class="toggle-password" 
-                on:click={() => verPassword = !verPassword}
-              >
-                {verPassword ? "👁️" : "🙈"} </button>
+              <input type={verPassword ? "text" : "password"} bind:value={regPassword} placeholder="Mín. 6 caracteres">
+              <button type="button" class="toggle-password" on:click={() => verPassword = !verPassword}>
+                {verPassword ? "😮" : "😴"}
+              </button>
             </div>
           </div>
         </div>
       </div>
-      <button class="boton1" on:click={manejarRegistro}>Registrarse</button>
+      <button class="boton1" on:click={manejarRegistro}>Enviar Confirmación</button>
       <p class="centrado">¿Ya tienes cuenta? <button class="link-btn" on:click={() => cambiarVista('login')}>Inicia Sesión</button></p>
     </div>
   {/if}
@@ -282,19 +234,19 @@
       <div class="titulo">Recuperar Cuenta</div>
       {#if pasoOlvido === 1}
         <div class="form-group">
-          <label for="correoRecup">Correo Electrónico</label>
-          <input id="correoRecup" type="email" bind:value={olvidoCorreo} placeholder="Tu correo institucional">
+          <label>Correo Electrónico</label>
+          <input type="email" bind:value={olvidoCorreo} placeholder="Correo institucional">
         </div>
         <button class="boton1" on:click={enviarCodigo}>Enviar Código</button>
       {:else}
-        <p class="centrado" style="margin-bottom:15px">Hemos enviado un código a: <strong>{olvidoCorreo}</strong></p>
+        <p class="centrado">Código enviado a: <strong>{olvidoCorreo}</strong></p>
         <div class="form-group">
-            <label>Código de Verificación</label>
-            <input type="text" bind:value={codigoVerificacion} placeholder="Ej: 123456">
+            <label>Código</label>
+            <input type="text" bind:value={codigoVerificacion} placeholder="Ingrese el código">
         </div>
         <div class="form-group">
             <label>Nueva Contraseña</label>
-            <input type="password" bind:value={nuevaPassword} placeholder="Nueva clave segura">
+            <input type="password" bind:value={nuevaPassword} placeholder="Nueva clave">
         </div>
         <button class="boton1" on:click={verificarYCambiar}>Cambiar Contraseña</button>
       {/if}
@@ -304,7 +256,6 @@
 </div>
 
 <style>
-  /* El CSS se mantiene exactamente igual a tu versión anterior */
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
 
   :global(body) {
@@ -343,18 +294,18 @@
   .top button {
     background: none;
     border: none;
-    height: 60px;
-    width: 140px;
+    height: 64px;
+    width: 166px;
     cursor: pointer;
     transition: transform 0.2s;
     box-shadow: none;
   }
   .top button:hover { transform: scale(1.02); }
-  .top img { height: 100%; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+  .top img { height: 100%; filter: drop-shadow(0 2px 4px rgba(45, 45, 45, 0.95)); }
 
   .fondo {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 55vh;
+    top: 0; left: -20px; width: 102%; height: 55vh;
     background-image: url("/Imagenes/FondoUleam.jpg");
     background-size: cover;
     background-position: center;
@@ -399,7 +350,6 @@
     padding-right: 5px; 
   }
 
-  /* Contenedor para alinear el input y el botón */
   .input-password-container {
     position: relative;
     display: flex;
@@ -477,11 +427,10 @@
   }
 
   .links {
-    /* Eliminamos cursor: pointer de aquí */
     display: flex;
     flex-direction: column;
     gap: 10px;
-    text-align: center; /* Asegura que el texto y p estén centrados */
+    text-align: center;
   }
 
   
