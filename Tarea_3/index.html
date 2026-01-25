@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="estilos.css">
+    <title>Solicitud de Inscripción</title>
+
+    <!-- Exportación de Estilo de Letra-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Antic+Slab&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet"></head>
+<body>
+    <div>
+        <!--Encabezado-->
+        <img id="LOL" src="titulo.png" class="perfil">
+        <h1 id="titulo1" >TORNEO</h2> 
+    </div>
+    <div id="introduccion">
+        <!--Introducción al Formulario-->
+        <p><strong>¡BIENVENIDO INVOCADOR!</strong></p>
+        <p>¿Posees grandes habilidades?</p>
+        <p>¿Quieres demostrarle a tus amigos que eres bueno y que no subes de elo solo por culpa de tus compañeros en rankeds?</p>
+        <p>Pues te esperamos este 10 de Diciembre a las 9 am en la facultad de Ciencias de la Vida y Tecnologías</p>
+        <p><strong>¡INSCRÍBETE AHORA!</strong></p>
+    </div>
+
+    <!--Formulario-->
+<form id=formulario action="" method="get">
+
+    <!--Ingreso de Nombres-->
+    <P><label for="nombre">Nombres:<span style="color: red;">*</span></label></P>
+    <P><input type="text" id="nombre" name="nombre" ></P>
+
+    <!--Ingreso de Apellidos-->
+    <P><label for="apellido">Apellidos:<span style="color: red;">*</span></label></P>
+    <P><input type="text" id="apellido" name="apellido" ></P>
+
+    <!--Ingreso de Cédula-->
+    <P><label for="cedula">Cédula:<span style="color: red;">*</span></label></P>
+    <P><input type="text" id="cedula" name="cedula" ></P>
+
+    <!--Ingreso de Fecha de Nacimiento-->
+    <P><label for="fecha">Fecha de nacimiento:<span style="color: red;">*</span></label>
+
+    <!--Selección de Región-->
+        <label for="region">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Región:<span style="color: red;">*</span></label></P>
+
+    <P><input type="date" id="fecha" name="fecha" >
+
+    <select id="region" name="region" >
+        <option value="">Seleccionar</option>
+        <option value="LAN">LAN</option>
+        <option value="LAS">LAS</option>
+        <option value="NA">NA</option>
+        <option value="EUW">EUW</option>
+    </select></P>
+
+    <!--Ingreso de Nombre Dentro del Juego-->
+    <P><label for="usuario">Nombre de invocador:<span style="color: red;">*</span></label></P>
+    <P><input type="text" id="usuario" name="usuario" ></P>
+
+    <!--Ingreso de Correo Electrónico-->
+    <P><label for="correo">Correo electrónico:<span style="color: red;">*</span></label></P>
+    <P><input type="email" id="correo" name="correo" ></P>
+
+    <!--Botón de Enviar-->
+    <P><button type="submit">Enviar</button></P>
+</form>
+<!--Llamada al JS-->
+<script src="main.js"></script>
+</body>
+</html>
+

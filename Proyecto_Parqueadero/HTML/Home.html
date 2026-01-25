@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking ULEAM</title>
+    <link rel="stylesheet" href="../CSS/estilos.css">
+    <link rel="stylesheet" href="../CSS/Home.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Parking ULEAM</h1>
+        </header>
+
+        <main class="main-layout">
+            <div class="left-panel">
+                <div class="buttons-row">
+                    <a href="Ingreso.html" class="btn ingreso">
+                        <img src="../Imagenes/Ingreso.png" alt="Ingreso">
+                        <span>INGRESO</span>
+                    </a>
+                    <a href="Salida.html" class="btn salida">
+                        <img src="../Imagenes/Salida.png" alt="Salida">
+                        <span>SALIDA</span>
+                    </a>
+                </div>
+
+                <div class="info-panel">
+                    <div>Espacios Disponibles: <span id="espaciosDisponibles">98</span></div>
+                    <div>Espacios Ocupados: <span id="espaciosOcupados">0</span></div>
+                </div>
+
+                <div class="footer-buttons">
+                    <button id="btnRegistro" class="btn small">Registro</button>
+                    <button id="btnCerrarSesion" class="btn small danger">Cerrar Sesión</button>
+                </div>
+            </div>
+
+            <div class="map-container">
+                <img id="mapImage" src="../Imagenes/EsquemaPark.png" alt="Estacionamiento" />
+                <div id="estacionamiento" class="overlay"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal registro -->
+    <div id="modalRegistro" class="modal hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Registro de Vehículos</h3>
+            <div id="registroVehiculos" class="table-wrapper">
+                <!-- tabla generada dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../JS/Home.js"></script>
+</body>
+</html>

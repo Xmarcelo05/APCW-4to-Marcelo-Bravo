@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salida - Parking ULEAM</title>
+    <link rel="stylesheet" href="../CSS/estilos.css">
+    <link rel="stylesheet" href="../CSS/Salida.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Salida - Parking ULEAM</h1>
+        </header>
+
+        <main class="main-layout">
+            <div class="left-panel">
+                <div class="info-box">
+                    <h3>Registrar salida</h3>
+                    <p>Seleccione una plaza ocupada en el mapa o busque por placa para procesar la salida.</p>
+                </div>
+
+                <div class="info-panel">
+                    <div>Espacios Disponibles: <span id="espaciosDisponibles">98</span></div>
+                    <div>Espacios Ocupados: <span id="espaciosOcupados">0</span></div>
+                </div>
+
+                <div class="footer-buttons">
+                    <button id="btnVolverHome" class="btn small danger" style="background: #dc3545; border: none;">Volver a Inicio</button>
+                </div>
+
+                <div id="resultadoSalida" class="info-panel" style="display:none">
+                    <div>Nombre: <span id="resNombre"></span></div>
+                    <div>Placa: <span id="resPlaca"></span></div>
+                    <div>Plaza: <span id="resPlaza"></span></div>
+                    <div>Hora Ingreso: <span id="resHora"></span></div>
+                    <div style="margin-top:10px">
+                        <button id="btnConfirmarSalida" class="btn small danger">Confirmar Salida</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="map-container">
+                <img id="mapImage" src="../Imagenes/EsquemaPark.png" alt="Estacionamiento" />
+                <div id="estacionamiento" class="overlay"></div>
+            </div>
+        </main>
+    </div>
+
+    <div id="modalConfirmacion" class="modal hidden">
+        <div class="modal-content">
+            <span id="closeModalConfirmacion" class="close">&times;</span>
+            <h3>Confirmar Salida - Plaza <span id="plazaNumeroModal"></span></h3>
+            <form id="formConfirmacionSalida" class="form-registro">
+                <p style="margin-bottom: 14px; color: #4b5563;">Por favor, ingrese la placa del vehículo para confirmar la salida:</p>
+                <div>
+                    <label for="inputPlacaConfirmacion">Placa del vehículo</label>
+                    <input id="inputPlacaConfirmacion" type="text" placeholder="Ej: ABC-1234" required />
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="btnCancelarConfirmacion" class="btn small">Cancelar</button>
+                    <button type="submit" id="btnVerificarPlaca" class="btn small ingreso">Verificar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../JS/Salida.js"></script>
+</body>
+</html>

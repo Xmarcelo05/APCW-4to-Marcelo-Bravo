@@ -1,0 +1,92 @@
+/* Estilo del cuerpo */
+body {
+  font-family: Arial;
+  background-color: #f4f4f4;
+}
+
+/* Botón para enviar el formulario */
+button {
+  background-color: #d93f4c;
+  color: white;
+  border: none;
+  padding: 12px;
+  cursor: pointer;
+  position: relative;
+  width: 100px;  
+  margin: 40px auto;
+  left: 168px;
+}
+
+/* Cambio de color cuando se pasa el cursor por encima del botón */
+button:hover {
+  background-color: #b02d38;
+}
+
+/*Cuadros de Ingreso de los Datos */
+input{
+  align-content: right;
+  background-color: #ffffff;
+  padding: 15px 10px 10px 20px;
+  border: 1px solid #000000;
+  font-family:"SUSE Mono", sans-serif;
+  width: 400px;
+}
+
+/* Cuadro de Ingreso de Fecha */
+#fecha{
+  width:238px;
+  font-size: 15px;
+}
+
+/* Cuadro de Seleccion de Región */
+#region{
+  font-family:"SUSE Mono", sans-serif;
+  align-content: right;
+  background-color: #ffffff;
+  padding: 16px 24px 10px 20px;
+  border: 1px solid #000000;
+  width: 153px;
+}
+
+/* Fuente de los párrafos */
+p{
+  font-family:"SUSE Mono", sans-serif;
+}
+
+/* Dimensiones del Formulario */
+form{
+  padding: 0px 20px 20px 20px;;
+  margin: 0px auto;
+  width: 433px;
+}
+
+/* Estilo de la palabra "TORNEO" */
+#titulo1{
+  position: relative;
+  font-size: 50px;
+  font-family:'Courier New', Courier, monospace;
+  color: #c59941;
+  padding: 50px 10px 10px 10px;
+  margin: 10px auto;
+  width: 500px;
+  text-align: left;
+  left: 38px;
+
+}
+
+/* Párrafo de Introducción */
+#introduccion{
+  padding: 10px 10px 10px 10px;
+  margin: 0px auto;
+  width: 1110px;
+  text-align: center;
+  
+}
+
+/* Imagen de la palabra "LEAGUE OF LEGENDS}"*/
+#LOL{
+  position: absolute;
+  width: 220px;
+  height: 75px;
+  padding: 32px 10px 0px 940px;
+}
