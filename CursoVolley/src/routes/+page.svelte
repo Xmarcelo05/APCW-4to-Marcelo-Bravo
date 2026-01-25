@@ -27,7 +27,7 @@
   
   <div class="cta-container">
     <a href={whatsappLink} target="_blank" class="btn-whatsapp">
-      <span>¡ Inscríbete Ahora !</span>
+      <span>¡ Inscríbete !</span>
       <img src="/WhatsApp.webp" alt="WA" class="btn-icon" />
     </a>
   </div>
@@ -271,7 +271,7 @@
   }
   .btn-yellow:hover { transform: skew(-10deg) translate(2px, 2px); box-shadow: 2px 2px 0px var(--primary-blue); }
 
-  /* --- CONTENT WRAPPER --- */
+  /* --- CONTENT WRAP --- */
   .content-wrapper { 
     position: relative; padding: 40px 5%; background-color: #ffffff; z-index: 4;
     overflow: hidden; 
@@ -301,10 +301,10 @@
     aspect-ratio: 1 / 1; border-bottom: 6px solid var(--primary-blue); 
   }
   .feature-card.compact:hover { transform: translateY(-5px); }
-  .image-box-compact {width: 100%; flex: 1; overflow: hidden; }
-  .image-box-compact1 {width: 100%; flex: 1; overflow: hidden; }
-  .image-box-compact img {object-position: top; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-  .image-box-compact1 img {object-position: center; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+  .image-box-compact {width: 100%;height: 200px;display: block; flex: 1; overflow: hidden; }
+  .image-box-compact1 {width: 100%;height: 200px;display: block; flex: 1; overflow: hidden; }
+  .image-box-compact img {object-position: top; width: 100%; height: 100%;display: block; object-fit: cover; transition: transform 0.5s; }
+  .image-box-compact1 img {object-position: center; width: 100%; height: 100%;display: block; object-fit: cover; transition: transform 0.5s; }
   .feature-card.compact:hover .image-box-compact img { transform: scale(1.05); }
   .text-box-compact { padding: 25px; text-align: center; }
   .text-box-compact h3 { margin: 15px 0 10px; font-size: 1.5rem; color: var(--dark-blue); font-weight: 800; }
@@ -328,29 +328,26 @@
   }
   .video-container video { width: 100%; height: 100%; display: block; object-fit: cover; }
 
-  /* --- LOGROS (ARREGLADO) --- */
+  /* LOGROS */
   .achievements-section {
     background-color: #f0f9ff; 
-    width: 100%; /* Asegura ancho total */
+    width: 100%; 
     padding-top: 40px;
-    padding-bottom: 100px;/* Padding solo arriba/abajo */
+    padding-bottom: 100px;
     border-top: 0px solid #e2e8f0;
-    /* Sin clip-path ni márgenes negativos raros */
   }
   
-  /* NUEVO: Contenedor central que limita el ancho y centra todo */
   .container-center {
     width: 100%;
     max-width: 1200px;
-    margin: 0 auto; /* Esto centra el bloque en la pantalla */
-    padding: 0 20px; /* Margen de seguridad para móviles */
+    margin: 0 auto; 
+    padding: 0 20px; 
     box-sizing: border-box;
   }
 
   .sport-title-wrapper.center { justify-content: center; margin-bottom: 50px; }
   .section-title { font-size: 2.5rem; color: var(--dark-blue); margin: 0; font-family: "Candal", sans-serif; }
 
-  /* Flexbox para centrar las tarjetas perfectamente */
   .stats-grid {
     display: flex;
     justify-content: center;
@@ -365,8 +362,7 @@
     border-radius: 20px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
     border-top: 5px solid var(--accent-yellow); 
-    
-    flex: 1 1 280px; /* Ancho flexible pero con base */
+    flex: 1 1 280px;
     max-width: 350px;
     min-width: 250px;
     text-align: center;
@@ -376,11 +372,11 @@
   .stat-number { font-size: 3rem; font-weight: 900; color: var(--primary-blue); margin: 0; line-height: 1; }
   .stat-card p { color: #64748b; font-weight: 700; margin-top: 10px; font-size: 1.1rem; }
 
-  /* --- CARRUSEL --- */
+  /* CARRUSEL */
   .carousel-section { 
       position: relative; background-color: var(--dark-blue); padding: 80px 0;
       clip-path: polygon(0 10%, 100% 0, 100% 100%, 0% 100%);
-      margin-top: -50px; /* Pequeño overlap decorativo limpio */
+      margin-top: -50px; 
       padding-top: 100px; 
       z-index: 5; 
   }
@@ -411,7 +407,51 @@
   
   .ig-link { display: inline-block; transition: transform 0.3s ease; }
   .ig-link:hover { transform: scale(1.1); }
-  .ig-icon { width: 100px; height: auto; display: block; }
-
+  .ig-icon { width: 140px; height: auto; display: block; }
   .footer-bottom { margin-top: 60px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 0.9rem; opacity: 0.6; }
+
+  /* AJUSTES CELULAR */
+  @media (max-width: 600px) {
+    .features-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .feature-card.compact {
+      aspect-ratio: auto;
+      height: auto;
+    }
+
+    .image-box-compact, .image-box-compact1 {
+      height: 200px;
+    }
+
+    /* --- LOGROS MÁS PEQUEÑOS EN CELULAR --- */
+    .stats-grid {
+      display: flex;
+      flex-direction: column; 
+      align-items: center;    
+      gap: 20px;              
+    }
+
+    .stat-card {
+      flex: 0 1 auto;
+      width: 80%;             
+      max-width: 280px;       
+      padding: 20px 15px;     
+    }
+
+    .stat-icon {
+      font-size: 2.5rem;      
+      margin-bottom: 10px;
+    }
+
+    .stat-number {
+      font-size: 2rem;        
+    }
+
+    .stat-card p {
+      font-size: 0.9rem;      
+    }
+  }
 </style>
