@@ -260,6 +260,11 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
 
+  /* Reset global para evitar desbordes */
+  :global(*) {
+    box-sizing: border-box;
+  }
+
   :global(body) {
     margin: 0;
     padding: 0;
@@ -270,12 +275,14 @@
 
   .login-wrapper {
     position: relative;
-    width: 100vw;
+    width: 100%;
+    /* Ajuste para móviles: permite scroll si la pantalla es muy pequeña */
     min-height: calc(100vh - 64px);
     margin-top: 64px;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px; /* Padding extra para que la card no toque los bordes */
   }
 
   .top {
@@ -297,17 +304,21 @@
     background: none;
     border: none;
     height: 64px;
-    width: 166px;
+    max-width: 166px; /* Evita que el logo sea gigante */
     cursor: pointer;
     transition: transform 0.2s;
     box-shadow: none;
+    padding: 10px 0;
   }
   .top button:hover { transform: scale(1.02); }
-  .top img { height: 100%; filter: drop-shadow(0 2px 4px rgba(45, 45, 45, 0.95)); }
+  .top img { height: 100%; width: auto; filter: drop-shadow(0 2px 4px rgba(45, 45, 45, 0.95)); }
 
   .fondo {
     position: absolute;
-    top: 0; left: -20px; width: 102%; height: 55vh;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 55vh;
     background-image: url("/Imagenes/FondoUleam.jpg");
     background-size: cover;
     background-position: center;
@@ -323,6 +334,7 @@
     z-index: 1;
   }
 
+  /* Tarjeta principal con ancho controlado */
   .card {
     position: relative;
     z-index: 10;
@@ -330,10 +342,11 @@
     padding: 45px;
     border-radius: 20px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    width: 90%;
-    max-width: 460px;
+    width: 100%;
+    max-width: 460px; /* Límite máximo para que no se deforme en PC */
     text-align: center;
     border: 1px solid rgba(0, 0, 0, 0.05);
+    margin: 0 auto;
   }
 
   .titulo {
@@ -342,12 +355,13 @@
     margin-bottom: 25px;
     color: #1a202c;
     letter-spacing: -0.5px;
+    line-height: 1.2;
   }
 
   .form-group { margin-bottom: 15px; text-align: left; }
   
   .grid-form {
-    max-height: 60vh;
+    max-height: 55vh; /* Ajustado para pantallas pequeñas */
     overflow-y: auto;
     padding-right: 5px; 
   }
@@ -367,6 +381,9 @@
     font-size: 1.2rem;
     padding: 0;
     box-shadow: none; 
+    height: 100%;
+    display: flex;
+    align-items: center;
   }
 
   .toggle-password:hover {
@@ -435,7 +452,6 @@
     text-align: center;
   }
 
-  
   .link-btn {
     background: none;
     border: none;
@@ -459,4 +475,28 @@
   .centrado { margin-top: 10px; font-size: 0.9rem; color: #718096; }
   .cancelar { color: #e53e3e; margin-top: 12px; display: block; width: 100%; text-align: center; }
   .cancelar:hover { color: #c53030; }
+
+  /* --- MEDIA QUERIES PARA CELULARES --- */
+  @media (max-width: 600px) {
+    .card {
+      padding: 25px 20px; /* Menos padding en celular para ganar espacio */
+      width: 95%; /* Ocupa casi todo el ancho */
+    }
+
+    .titulo {
+      font-size: 1.7rem; /* Título un poco más pequeño */
+      margin-bottom: 20px;
+    }
+
+    /* Ajuste para que iOS no haga zoom al escribir */
+    input {
+      font-size: 16px; 
+      padding: 12px 14px;
+    }
+
+    .boton1 {
+      padding: 14px;
+      font-size: 1rem;
+    }
+  }
 </style>
