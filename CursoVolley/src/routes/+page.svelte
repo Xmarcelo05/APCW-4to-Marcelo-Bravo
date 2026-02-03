@@ -137,19 +137,21 @@
         </div>
         <div class="trainer-info">
             <h3>Nuestro Equipo de Formadores</h3>
-            <p>
+            <p class="trainer-desc">
                 Contamos con profesionales dedicados no solo a la enseñanza técnica del voleibol, 
                 sino a la formación integral del carácter. Guiamos a cada alumno con paciencia, 
                 ejemplo y exigencia para sacar su mejor versión.
             </p>
+            
             <span class="trainer-quote">Entrenadores:</span>
-            <p>
+            <p class="trainer-list">
                 - Nivel Básico: German Tomala<br>
                 - Nivel Intermedio: Snaider Zambrano<br>
                 - Nivel Avanzado: Bryan Cordero
             </p>
+            
             <span class="trainer-quote">Coordinador General:</span>
-            <p>- Lic. Julio Pineda</p>
+            <p class="trainer-list">- Lic. Julio Pineda</p>
         </div>
       </div>
 
@@ -452,18 +454,36 @@
     font-size: 1.8rem;
     margin-top: 0;
     margin-bottom: 15px;
+    text-align: center; /* Título centrado */
   }
-  .trainer-info p {
+
+  /* CLASE PARA DESCRIPCION (JUSTIFICADA) */
+  .trainer-desc {
+    text-align: justify;
     font-size: 1.1rem;
     line-height: 1.6;
     color: #334155;
     margin-bottom: 20px;
   }
+
+  /* CLASE PARA LISTA (ALINEADA A IZQUIERDA) */
+  .trainer-list {
+    text-align: left;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #334155;
+    margin-bottom: 20px;
+    padding-left: 20px; /* Un poco de sangría para que se vea ordenado */
+  }
+
   .trainer-quote {
     font-weight: 900;
     color: var(--primary-blue);
     font-style: italic;
     font-size: 1.2rem;
+    display: block;
+    margin-bottom: 5px;
+    text-align: left; /* Títulos pequeños a la izquierda */
   }
 
 
@@ -556,7 +576,16 @@
     }
     .trainer-info {
         padding: 25px;
-        text-align: center;
+        /* Quitamos text-align center general para que respeten las clases específicas */
+        text-align: left; 
+    }
+    
+    /* Aseguramos que en celular se mantenga la justificación y alineación */
+    .trainer-desc {
+        text-align: justify;
+    }
+    .trainer-list {
+        text-align: left;
     }
 
     /* --- LOGROS MÁS PEQUEÑOS EN CELULAR --- */
