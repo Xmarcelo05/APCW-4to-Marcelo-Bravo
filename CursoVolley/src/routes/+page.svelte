@@ -1,16 +1,17 @@
 <script lang="ts">
+  // Se añade la propiedad 'caption' para las descripciones de las fotos
   const itemsBase = [
-    { type: 'image', src: "/Imagen1.webp" },
-    { type: 'image', src: '/Imagen2.webp' },
-    { type: 'image', src: '/Imagen3.webp' },
-    { type: 'image', src: '/Imagen4.webp' },
-    { type: 'image', src: "/Imagen5.webp" },
-    { type: 'image', src: '/Imagen6.webp' },
-    { type: 'image', src: '/Imagen7.webp' },
-    { type: 'image', src: '/Imagen8.webp' },
-    { type: 'image', src: "/Imagen9.webp" },
-    { type: 'image', src: '/Imagen10.webp' },
-    { type: 'image', src: '/Imagen11.webp' },
+    { type: 'image', src: "/Imagen1.webp", caption: "18/09/2021: Torneo Beach Vóley - 2do lugar - sub 16" },
+    { type: 'image', src: '/Imagen2.webp', caption: "" },
+    { type: 'image', src: '/Imagen3.webp', caption: "18/09/2021: Torneo Beach Vóley - 2do lugar - sub 16" },
+    { type: 'image', src: '/Imagen4.webp', caption: "29/08/2024" },
+    { type: 'image', src: "/Imagen5.webp", caption: "09/03/2022" },
+    { type: 'image', src: '/Imagen6.webp', caption: "04/03/2024: 2do lugar - menores mujeres. 3er lugar - juvenil mujeres. 3er lugar - prejuvenil varones" },
+    { type: 'image', src: '/Imagen7.webp', caption: "01/08/2021: Final de Campeonato - prejuvenil sub 15" },
+    { type: 'image', src: '/Imagen8.webp', caption: "09/03/2025: Campeonato Nacional - 1er lugar U-17 Damas" },
+    { type: 'image', src: "/Imagen9.webp", caption: "09/03/2025: Campeonato Nacional - 1er lugar U-13 Varones" },
+    { type: 'image', src: '/Imagen10.webp', caption: "01/08/2021: Final de Campeonato - prejuvenil sub 15" },
+    { type: 'image', src: '/Imagen11.webp', caption: "12/08/2024: 2da Edición Campeonato de legovolley" },
   ];
 
   const carouselItems = [...itemsBase, ...itemsBase, ...itemsBase];
@@ -41,7 +42,7 @@
     <div class="hero-content">
       <h1 id="titulo1">Volley de Playa y Sala</h1>
       <h2 id="titulo2">CURSOS VACACIONALES</h2>
-      <p>Entrenamiento para jóvenes campeones de Manta.</p>
+      <p>Más que atletas, formamos personas con disciplina, pasión y compromiso.</p>
       <a href="#contacto" class="btn-yellow">Más información</a>
     </div>
     <div class="hero-border"></div>
@@ -54,23 +55,23 @@
     <div class="features-grid">
       <div class="feature-card compact">
         <div class="image-box-compact">
-          <img src="/Imagen11.webp" alt="Técnica" />
+          <img src="/Imagen11.webp" alt="Formación" />
         </div>
         <div class="text-box-compact">
-          <span class="badge blue">Técnica</span>
-          <h3>Aprende de los Mejores</h3>
-          <p>Metodología para mejorar tu recepción, voleo y servicio.</p>
+          <span class="badge blue">Formación</span>
+          <h3>Disciplina y Orden</h3>
+          <p>Fomentamos el respeto y la constancia como base para ser personas de bien dentro y fuera de la cancha.</p>
         </div>
       </div>
 
       <div class="feature-card compact">
         <div class="image-box-compact1">
-          <img src="/Imagen5.webp" alt="Salto" />
+          <img src="/Imagen5.webp" alt="Equipo" />
         </div>
         <div class="text-box-compact">
-          <span class="badge yellow">Potencia</span>
-          <h3>Eleva tu Juego</h3>
-          <p>Preparación física para aumentar tu salto y potencia de remate.</p>
+          <span class="badge yellow">Valores</span>
+          <h3>Trabajo en Equipo</h3>
+          <p>Aprendemos que el compañerismo, la lealtad y el esfuerzo compartido son la clave del éxito.</p>
         </div>
       </div>
     </div>
@@ -117,19 +118,41 @@
         <div class="stat-card">
           <div class="stat-icon">👥</div>
           <h3 class="stat-number">+500</h3>
-          <p>Alumnos Formados</p>
+          <p>Jóvenes Formados</p>
         </div>
         <div class="stat-card">
           <div class="stat-icon">📅</div>
           <h3 class="stat-number">10 Años</h3>
-          <p>De Experiencia</p>
+          <p>Creando Disciplina</p>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">🏆</div>
-          <h3 class="stat-number">#1</h3>
-          <p>En Torneos Locales</p>
+          <div class="stat-icon">🤝</div> <h3 class="stat-number">100%</h3>
+          <p>Compromiso</p>
         </div>
       </div>
+
+      <div class="trainers-box">
+        <div class="trainer-img-container">
+            <img src="/Imagen12.webp" alt="Entrenadores" /> 
+        </div>
+        <div class="trainer-info">
+            <h3>Nuestro Equipo de Formadores</h3>
+            <p>
+                Contamos con profesionales dedicados no solo a la enseñanza técnica del voleibol, 
+                sino a la formación integral del carácter. Guiamos a cada alumno con paciencia, 
+                ejemplo y exigencia para sacar su mejor versión.
+            </p>
+            <span class="trainer-quote">Entrenadores:</span>
+            <p>
+                - Nivel Básico: Prof. German Tomala<br>
+                - Nivel Intermedio: Snaider Zambrano<br>
+                - Nivel Avanzado: Bryan Cordero
+            </p>
+            <span class="trainer-quote">Coordinador General:</span>
+            <p>- Lic. Julio Pineda</p>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -144,6 +167,9 @@
         {#each carouselItems as item}
           <div class="carousel-card">
             <img src={item.src} alt="Momento del curso" />
+            <div class="carousel-caption">
+                <p>{item.caption}</p>
+            </div>
           </div>
         {/each}
       </div>
@@ -266,6 +292,8 @@
     background-color: var(--accent-yellow); color: var(--dark-blue);
     padding: 15px 40px; border-radius: 5px; 
     text-decoration: none; font-weight: 900; text-transform: uppercase;
+    /* BORDE DE DISEÑO EN BOTÓN */
+    border: 2px solid var(--dark-blue);
     box-shadow: 5px 5px 0px var(--primary-blue); 
     transition: all 0.2s ease; transform: skew(-10deg); 
   }
@@ -296,19 +324,22 @@
   }
   .feature-card.compact {
     background: white; border-radius: 10px; overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    /* CAMBIO: Borde más diseñado y sombra sólida */
+    border: 3px solid var(--dark-blue);
+    box-shadow: 8px 8px 0px var(--accent-yellow);
     transition: transform 0.3s ease; display: flex; flex-direction: column;
-    aspect-ratio: 1 / 1; border-bottom: 6px solid var(--primary-blue); 
+    aspect-ratio: 1 / 1; 
   }
-  .feature-card.compact:hover { transform: translateY(-5px); }
-  .image-box-compact {width: 100%;height: 200px;display: block; flex: 1; overflow: hidden; }
-  .image-box-compact1 {width: 100%;height: 200px;display: block; flex: 1; overflow: hidden; }
+  .feature-card.compact:hover { transform: translateY(-5px); box-shadow: 10px 10px 0px var(--primary-blue); }
+  
+  .image-box-compact {width: 100%;height: 200px;display: block; flex: 1; overflow: hidden; border-bottom: 3px solid var(--dark-blue); }
+  .image-box-compact1 {width: 100%;height: 200px;display: block; flex: 1; overflow: hidden; border-bottom: 3px solid var(--dark-blue); }
   .image-box-compact img {object-position: top; width: 100%; height: 100%;display: block; object-fit: cover; transition: transform 0.5s; }
   .image-box-compact1 img {object-position: center; width: 100%; height: 100%;display: block; object-fit: cover; transition: transform 0.5s; }
   .feature-card.compact:hover .image-box-compact img { transform: scale(1.05); }
   .text-box-compact { padding: 25px; text-align: center; }
   .text-box-compact h3 { margin: 15px 0 10px; font-size: 1.5rem; color: var(--dark-blue); font-weight: 800; }
-  .badge { padding: 6px 16px; border-radius: 4px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; display: inline-block; transform: skew(-10deg); }
+  .badge { padding: 6px 16px; border-radius: 4px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; display: inline-block; transform: skew(-10deg); border: 1px solid currentColor;}
   .badge.blue { background: #e0f2fe; color: var(--primary-blue); }
   .badge.yellow { background: #fffbeb; color: #b45309; }
 
@@ -318,17 +349,19 @@
   .video-column { display: flex; flex-direction: column; align-items: center; }
   
   .sport-title-wrapper { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
-  .title-bar-left, .title-bar-right { width: 40px; height: 4px; background-color: var(--accent-yellow); transform: skew(-20deg); }
+  .title-bar-left, .title-bar-right { width: 40px; height: 4px; background-color: var(--accent-yellow); transform: skew(-20deg); border: 1px solid var(--dark-blue); }
   .section-title-small { font-size: 2rem; color: var(--dark-blue); margin: 0; font-family: "Candal", sans-serif; text-transform: uppercase; letter-spacing: 1px; }
 
   .video-container {
       border-radius: 10px; overflow: hidden;
-      box-shadow: 10px 10px 0px rgba(0,0,0,0.1); 
-      background: #000; aspect-ratio: 1 / 1; width: 100%; border: 4px solid white; 
+      /* CAMBIO: Borde más diseñado */
+      border: 3px solid var(--dark-blue);
+      box-shadow: 8px 8px 0px var(--accent-yellow); 
+      background: #000; aspect-ratio: 1 / 1; width: 100%; 
   }
   .video-container video { width: 100%; height: 100%; display: block; object-fit: cover; }
 
-  /* LOGROS */
+  /* LOGROS Y ENTRENADORES */
   .achievements-section {
     background-color: #f0f9ff; 
     width: 100%; 
@@ -354,14 +387,18 @@
     flex-wrap: wrap;
     gap: 40px;
     width: 100%;
+    margin-bottom: 60px; /* Espacio antes de los entrenadores */
   }
 
   .stat-card {
     background: white; 
     padding: 40px 20px; 
     border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
-    border-top: 5px solid var(--accent-yellow); 
+    /* CAMBIO: Borde más diseñado */
+    border: 3px solid var(--dark-blue);
+    box-shadow: 8px 8px 0px rgba(0,0,0,0.1); 
+    border-top: 8px solid var(--accent-yellow); /* Borde superior más grueso */
+    
     flex: 1 1 280px;
     max-width: 350px;
     min-width: 250px;
@@ -371,6 +408,63 @@
   .stat-icon { font-size: 3.5rem; margin-bottom: 15px; display: block; margin: 0 auto 15px; }
   .stat-number { font-size: 3rem; font-weight: 900; color: var(--primary-blue); margin: 0; line-height: 1; }
   .stat-card p { color: #64748b; font-weight: 700; margin-top: 10px; font-size: 1.1rem; }
+
+  /* --- NUEVOS ESTILOS: TARJETA DE ENTRENADORES --- */
+  .trainers-box {
+    background-color: white;
+    border-radius: 20px;
+    border: 3px solid var(--dark-blue);
+    box-shadow: 10px 10px 0px var(--primary-blue);
+    display: flex;
+    overflow: hidden;
+    max-width: 1100px;
+    height: 400px;
+    margin: 0 auto;
+    flex-direction: row;
+  }
+
+  .trainer-img-container {
+    flex: 1;
+    min-width: 300px;
+    border-right: 3px solid var(--dark-blue);
+  }
+  .trainer-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .trainer-info {
+    flex: 1.5;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-image: radial-gradient(#e0f2fe 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .trainer-info h3 {
+    font-family: "Candal", sans-serif;
+    color: var(--dark-blue);
+    font-size: 1.8rem;
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+  .trainer-info p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #334155;
+    margin-bottom: 20px;
+  }
+  .trainer-quote {
+    font-weight: 900;
+    color: var(--primary-blue);
+    font-style: italic;
+    font-size: 1.2rem;
+  }
+
 
   /* CARRUSEL */
   .carousel-section { 
@@ -394,9 +488,31 @@
   .carousel-card { 
     width: 300px; height: 300px; flex-shrink: 0; 
     border-radius: 10px; overflow: hidden; 
-    border: 4px solid rgba(255,255,255,0.2); 
+    border: 4px solid white; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative; /* Para posicionar el texto encima */
   }
-  .carousel-card img { width: 100%; height: 100%; object-fit: cover; }
+  .carousel-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  
+  /* NUEVO: Descripción sobre la imagen del carrusel */
+  .carousel-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    color: white;
+    padding: 20px 10px 10px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  .carousel-caption p {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px black;
+  }
+
   @keyframes scroll-infinito { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-33.33% - 15px)); } }
 
   /* FOOTER */
@@ -407,7 +523,7 @@
   
   .ig-link { display: inline-block; transition: transform 0.3s ease; }
   .ig-link:hover { transform: scale(1.1); }
-  .ig-icon { width: 140px; height: auto; display: block; }
+  .ig-icon { width: 100px; height: auto; display: block; }
   .footer-bottom { margin-top: 60px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 0.9rem; opacity: 0.6; }
 
   /* AJUSTES CELULAR */
@@ -424,6 +540,20 @@
 
     .image-box-compact, .image-box-compact1 {
       height: 200px;
+    }
+
+    /* Ajuste para la nueva caja de entrenadores en celular */
+    .trainers-box {
+        flex-direction: column;
+    }
+    .trainer-img-container {
+        border-right: none;
+        border-bottom: 3px solid var(--dark-blue);
+        height: 250px;
+    }
+    .trainer-info {
+        padding: 25px;
+        text-align: center;
     }
 
     /* --- LOGROS MÁS PEQUEÑOS EN CELULAR --- */
