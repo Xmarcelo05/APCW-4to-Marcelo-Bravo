@@ -144,7 +144,7 @@
             </p>
             <span class="trainer-quote">Entrenadores:</span>
             <p>
-                - Nivel Básico: Prof. German Tomala<br>
+                - Nivel Básico: German Tomala<br>
                 - Nivel Intermedio: Snaider Zambrano<br>
                 - Nivel Avanzado: Bryan Cordero
             </p>
@@ -418,6 +418,7 @@
     display: flex;
     overflow: hidden;
     max-width: 1100px;
+    /* IMPORTANTE: Altura fija solo para PC */
     height: 400px;
     margin: 0 auto;
     flex-direction: row;
@@ -545,6 +546,8 @@
     /* Ajuste para la nueva caja de entrenadores en celular */
     .trainers-box {
         flex-direction: column;
+        /* CRÍTICO: Altura automática para que quepa todo el texto nuevo */
+        height: auto; 
     }
     .trainer-img-container {
         border-right: none;
