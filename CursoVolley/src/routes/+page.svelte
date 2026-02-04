@@ -1,4 +1,8 @@
 <script lang="ts">
+  import Icon from '@iconify/svelte';
+  import { onMount } from 'svelte';
+  import { fade, fly } from 'svelte/transition';
+  
   // Se añade la propiedad 'caption' para las descripciones de las fotos
   const itemsBase = [
     { type: 'image', src: "/Imagen1.webp", caption: "18/09/2021: Torneo Beach Vóley - 2do lugar - sub 16" },
@@ -15,7 +19,74 @@
   ];
 
   const carouselItems = [...itemsBase, ...itemsBase, ...itemsBase];
-  const whatsappLink = "https://wa.me/593998281613";
+  
+  // Mensaje personalizado para WhatsApp
+  const mensajeWA = encodeURIComponent("Hola, quisiera saber más detalles de su curso");
+  const whatsappLink = `https://wa.me/593998281613?text=${mensajeWA}`;
+  
+  // Variables para animación de conteo
+  let numeroJovenes = 0;
+  let numeroAnios = 0;
+  let numeroCompromiso = 0;
+  let seccionVisible = false;
+  
+  // Variables para control de videos
+  let videoPlaying1 = false;
+  let videoPlaying2 = false;
+  
+  function toggleVideo(videoNumber: number) {
+    if (videoNumber === 1) {
+      const video = document.getElementById('video1') as HTMLVideoElement;
+      if (video.paused) {
+        video.play();
+        videoPlaying1 = true;
+      } else {
+        video.pause();
+        videoPlaying1 = false;
+      }
+    } else {
+      const video = document.getElementById('video2') as HTMLVideoElement;
+      if (video.paused) {
+        video.play();
+        videoPlaying2 = true;
+      } else {
+        video.pause();
+        videoPlaying2 = false;
+      }
+    }
+  }
+
+  // Función para animar conteo
+  function animarConteo(inicio: number, fin: number, duracion: number, callback: (valor: number) => void) {
+    const incremento = (fin - inicio) / (duracion / 16);
+    let actual = inicio;
+    const intervalo = setInterval(() => {
+      actual += incremento;
+      if ((incremento > 0 && actual >= fin) || (incremento < 0 && actual <= fin)) {
+        actual = fin;
+        clearInterval(intervalo);
+      }
+      callback(Math.floor(actual));
+    }, 16);
+  }
+
+  onMount(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !seccionVisible) {
+          seccionVisible = true;
+          animarConteo(0, 500, 2000, (val) => numeroJovenes = val);
+          animarConteo(0, 10, 1500, (val) => numeroAnios = val);
+          animarConteo(0, 100, 2500, (val) => numeroCompromiso = val);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const seccionLogros = document.querySelector('.achievements-section');
+    if (seccionLogros) observer.observe(seccionLogros);
+
+    return () => observer.disconnect();
+  });
 </script>
 
 <nav class="navbar">
@@ -77,30 +148,61 @@
     </div>
 
     <div class="video-section">
+        <div class="section-header-videos">
+          <h2 class="section-title-videos">Vive la Experiencia</h2>
+          <p class="section-subtitle-videos">Descubre cómo entrenamos y competimos</p>
+        </div>
+        
         <div class="video-grid">
-            <div class="video-column">
-                <div class="sport-title-wrapper">
-                  <div class="title-bar-left"></div>
-                  <h2 class="section-title-small">Entrenamientos</h2>
-                  <div class="title-bar-right"></div>
-                </div>
-                <div class="video-container">
-                    <video src="/Video1.mp4" controls poster="/Imagen10.webp">
+            <div class="video-card group">
+                <span class="video-label">Entrenamientos</span>
+                <div class="video-wrapper">
+                    <video id="video1" src="/Video1.mp4" poster="/Imagen10.webp" loop muted playsinline>
+                        <track kind="captions" />
                         Tu navegador no soporta videos.
                     </video>
+                    <button 
+                        class="video-overlay {videoPlaying1 ? 'playing' : ''}" 
+                        on:click={() => toggleVideo(1)}
+                        aria-label={videoPlaying1 ? 'Pausar video' : 'Reproducir video'}
+                    >
+                        <div class="overlay-content">
+                            <Icon 
+                                icon={videoPlaying1 ? "solar:pause-circle-bold-duotone" : "solar:play-circle-bold-duotone"} 
+                                width={videoPlaying1 ? "60" : "80"}
+                                height={videoPlaying1 ? "60" : "80"}
+                            />
+                            {#if !videoPlaying1}
+                                <span class="play-text">Ver entrenamiento</span>
+                            {/if}
+                        </div>
+                    </button>
                 </div>
             </div>
 
-            <div class="video-column">
-                <div class="sport-title-wrapper">
-                  <div class="title-bar-left"></div>
-                  <h2 class="section-title-small">Torneos</h2>
-                  <div class="title-bar-right"></div>
-                </div>
-                <div class="video-container">
-                    <video src="/Video2.mp4" controls poster="/Imagen3.webp">
+            <div class="video-card group">
+                <span class="video-label">Torneos</span>
+                <div class="video-wrapper">
+                    <video id="video2" src="/Video2.mp4" poster="/Imagen3.webp" loop muted playsinline>
+                        <track kind="captions" />
                         Tu navegador no soporta videos.
                     </video>
+                    <button 
+                        class="video-overlay {videoPlaying2 ? 'playing' : ''}" 
+                        on:click={() => toggleVideo(2)}
+                        aria-label={videoPlaying2 ? 'Pausar video' : 'Reproducir video'}
+                    >
+                        <div class="overlay-content">
+                            <Icon 
+                                icon={videoPlaying2 ? "solar:pause-circle-bold-duotone" : "solar:play-circle-bold-duotone"} 
+                                width={videoPlaying2 ? "60" : "80"}
+                                height={videoPlaying2 ? "60" : "80"}
+                            />
+                            {#if !videoPlaying2}
+                                <span class="play-text">Ver competencia</span>
+                            {/if}
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>
@@ -115,20 +217,31 @@
       </div>
       
       <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon">👥</div>
-          <h3 class="stat-number">+500</h3>
-          <p>Jóvenes Formados</p>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">📅</div>
-          <h3 class="stat-number">10 Años</h3>
-          <p>Creando Disciplina</p>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">🤝</div> <h3 class="stat-number">100%</h3>
-          <p>Compromiso</p>
-        </div>
+        {#if seccionVisible}
+          <div class="stat-card" in:fly={{ y: 50, duration: 800, delay: 0 }}>
+            <div class="stat-icon">
+              <Icon icon="solar:users-group-two-rounded-bold-duotone" width="56" height="56" />
+            </div>
+            <h3 class="stat-number">+{numeroJovenes}</h3>
+            <p>Jóvenes Formados</p>
+          </div>
+          
+          <div class="stat-card" in:fly={{ y: 50, duration: 800, delay: 200 }}>
+            <div class="stat-icon">
+              <Icon icon="solar:calendar-bold-duotone" width="56" height="56" />
+            </div>
+            <h3 class="stat-number">{numeroAnios} Años</h3>
+            <p>Creando Disciplina</p>
+          </div>
+          
+          <div class="stat-card" in:fly={{ y: 50, duration: 800, delay: 400 }}>
+            <div class="stat-icon">
+              <Icon icon="solar:hand-shake-bold-duotone" width="56" height="56" />
+            </div>
+            <h3 class="stat-number">{numeroCompromiso}%</h3>
+            <p>Compromiso</p>
+          </div>
+        {/if}
       </div>
 
       <div class="trainers-box">
@@ -137,21 +250,19 @@
         </div>
         <div class="trainer-info">
             <h3>Nuestro Equipo de Formadores</h3>
-            <p class="trainer-desc">
+            <p>
                 Contamos con profesionales dedicados no solo a la enseñanza técnica del voleibol, 
                 sino a la formación integral del carácter. Guiamos a cada alumno con paciencia, 
                 ejemplo y exigencia para sacar su mejor versión.
             </p>
-            
             <span class="trainer-quote">Entrenadores:</span>
-            <p class="trainer-list">
+            <p>
                 - Nivel Básico: German Tomala<br>
                 - Nivel Intermedio: Snaider Zambrano<br>
                 - Nivel Avanzado: Bryan Cordero
             </p>
-            
             <span class="trainer-quote">Coordinador General:</span>
-            <p class="trainer-list">- Lic. Julio Pineda</p>
+            <p>- Lic. Julio Pineda</p>
         </div>
       </div>
 
@@ -179,27 +290,75 @@
   </section>
 
   <footer id="contacto" class="footer">
-    <div class="footer-grid">
-      <div class="footer-info">
-        <h3>Contacto</h3>
-        <p>📍 Playa El Murciélago, Manta <br>📍Cancha Punto AS.</p>
-        <p>👤 Lic. Julio Pineda</p>
-        <p>📞 +593 0998281613</p>
-      </div>
-      <div class="footer-hours">
-        <h3>Horarios de Atención</h3>
-        <p>Lunes a Viernes: 8:00 - 18:00</p>
-        <p>Sábados y Domingos 09:00 - 15:00</p>
-      </div>
-      <div class="footer-social">
-        <h3>Síguenos</h3>
-        <a href="https://www.instagram.com/gladiadores_academiaa/" target="_blank" class="ig-link">
-            <img src="/Instagram.webp" alt="Instagram" class="ig-icon" />
-        </a>
-      </div>
+    <!-- Separador Wave SVG -->
+    <div class="wave-separator">
+      <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="currentColor"></path>
+        <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="currentColor"></path>
+        <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="currentColor"></path>
+      </svg>
     </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 Academia Gl@di@dores del Voleibol</p>
+    
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-info">
+          <h3>Contacto</h3>
+          <p>
+            <Icon icon="solar:map-point-bold-duotone" width="20" height="20" class="inline-icon" />
+            Playa El Murciélago, Manta
+          </p>
+          <p>
+            <Icon icon="solar:map-point-bold-duotone" width="20" height="20" class="inline-icon" />
+            Cancha Punto AS.
+          </p>
+          <p>
+            <Icon icon="solar:user-bold-duotone" width="20" height="20" class="inline-icon" />
+            Lic. Julio Pineda
+          </p>
+          <div class="phone-section">
+            <p>
+              <Icon icon="solar:phone-bold-duotone" width="20" height="20" class="inline-icon" />
+              <a href="tel:+593998281613" class="phone-link">+593 0998281613</a>
+            </p>
+            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" class="btn-whatsapp-footer" aria-label="Contactar al Lic. Julio Pineda por WhatsApp">
+              <Icon icon="logos:whatsapp-icon" width="18" height="18" />
+              Escríbenos
+            </a>
+          </div>
+        </div>
+        
+        <div class="footer-hours">
+          <h3>Horarios de Atención</h3>
+          <p>
+            <Icon icon="solar:calendar-bold-duotone" width="20" height="20" class="inline-icon" />
+            Lunes a Viernes: 8:00 - 18:00
+          </p>
+          <p>
+            <Icon icon="solar:calendar-bold-duotone" width="20" height="20" class="inline-icon" />
+            Sábados y Domingos: 09:00 - 15:00
+          </p>
+        </div>
+        
+        <div class="footer-social">
+          <h3>Síguenos</h3>
+          <a href="https://www.instagram.com/gladiadores_academiaa/" target="_blank" class="ig-link">
+            <img src="/Instagram.webp" alt="Instagram" class="ig-icon" />
+          </a>
+          <p class="social-text">@gladiadores_academiaa</p>
+        </div>
+        
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <img src="/Logo.webp" alt="Logo Academia" />
+          </div>
+          <p class="brand-text">Academia Gl@di@dores</p>
+          <p class="brand-subtitle">Formando Campeones</p>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 Academia Gl@di@dores del Voleibol</p>
+      </div>
     </div>
   </footer>
 </main>
@@ -313,11 +472,6 @@
       z-index: 0;
   }
   .stripe-top-right { top: -50px; right: -100px; width: 400px; height: 400px; transform: rotate(15deg); }
-  .stripe-middle-left {
-      top: 40%; left: -150px; width: 300px; height: 600px;
-      background: repeating-linear-gradient(-45deg, rgba(255, 214, 10, 0.1), rgba(255, 214, 10, 0.1) 20px, transparent 20px, transparent 60px);
-      transform: rotate(-10deg);
-  }
 
   /* FEATURES */
   .features-grid {
@@ -346,30 +500,181 @@
   .badge.yellow { background: #fffbeb; color: #b45309; }
 
   /* VIDEOS */
-  .video-section { max-width: 1100px; margin: 0 auto 60px auto; position: relative; z-index: 2; }
-  .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
-  .video-column { display: flex; flex-direction: column; align-items: center; }
-  
-  .sport-title-wrapper { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
-  .title-bar-left, .title-bar-right { width: 40px; height: 4px; background-color: var(--accent-yellow); transform: skew(-20deg); border: 1px solid var(--dark-blue); }
-  .section-title-small { font-size: 2rem; color: var(--dark-blue); margin: 0; font-family: "Candal", sans-serif; text-transform: uppercase; letter-spacing: 1px; }
-
-  .video-container {
-      border-radius: 10px; overflow: hidden;
-      /* CAMBIO: Borde más diseñado */
-      border: 3px solid var(--dark-blue);
-      box-shadow: 8px 8px 0px var(--accent-yellow); 
-      background: #000; aspect-ratio: 1 / 1; width: 100%; 
+  .video-section { 
+    max-width: 1200px; 
+    margin: 0 auto 80px auto; 
+    position: relative; 
+    z-index: 2;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+    border-radius: 30px;
   }
-  .video-container video { width: 100%; height: 100%; display: block; object-fit: cover; }
+  
+  .section-header-videos {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  
+  .section-title-videos {
+    font-size: 2.8rem;
+    color: var(--dark-blue);
+    margin: 0 0 15px 0;
+    font-family: "Candal", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .section-subtitle-videos {
+    font-size: 1.2rem;
+    color: #64748b;
+    font-weight: 500;
+    margin: 0;
+  }
+  
+  .video-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+    gap: 40px;
+  }
+  
+  .video-card {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 
+      0 20px 60px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
+    transition: all 0.4s ease;
+    background: white;
+  }
+  
+  .video-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 
+      0 30px 80px rgba(0, 74, 173, 0.25),
+      0 0 0 2px var(--accent-yellow);
+  }
+  
+  .video-label {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 2px solid var(--accent-yellow);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .video-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+  }
+  
+  .video-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 31, 63, 0.3);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    cursor: pointer;
+    border: none;
+    transition: all 0.4s ease;
+    z-index: 5;
+  }
+  
+  .video-card:hover .video-overlay {
+    background: rgba(0, 31, 63, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  
+  .video-overlay.playing {
+    background: transparent;
+    opacity: 0;
+  }
+  
+  .video-overlay.playing:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  .overlay-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+    transition: all 0.3s ease;
+  }
+  
+  .video-card:hover .overlay-content {
+    transform: scale(1.08);
+    color: var(--accent-yellow);
+  }
+  
+  .play-text {
+    display: block;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-top: 15px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  }
+  
+  .video-card:hover .play-text {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   /* LOGROS Y ENTRENADORES */
   .achievements-section {
-    background-color: #f0f9ff; 
+    background: linear-gradient(135deg, #182b57 0%, #004aad 100%);
     width: 100%; 
-    padding-top: 40px;
+    padding-top: 60px;
     padding-bottom: 100px;
     border-top: 0px solid #e2e8f0;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .achievements-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(255, 214, 10, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(0, 168, 232, 0.1) 0%, transparent 50%);
+    pointer-events: none;
   }
   
   .container-center {
@@ -381,7 +686,13 @@
   }
 
   .sport-title-wrapper.center { justify-content: center; margin-bottom: 50px; }
-  .section-title { font-size: 2.5rem; color: var(--dark-blue); margin: 0; font-family: "Candal", sans-serif; }
+  .section-title { 
+    font-size: 2.5rem; 
+    color: white; 
+    margin: 0; 
+    font-family: "Candal", sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
 
   .stats-grid {
     display: flex;
@@ -393,43 +704,108 @@
   }
 
   .stat-card {
-    background: white; 
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     padding: 40px 20px; 
-    border-radius: 20px;
-    /* CAMBIO: Borde más diseñado */
-    border: 3px solid var(--dark-blue);
-    box-shadow: 8px 8px 0px rgba(0,0,0,0.1); 
-    border-top: 8px solid var(--accent-yellow); /* Borde superior más grueso */
+    border-radius: 24px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-top: 6px solid var(--accent-yellow);
     
     flex: 1 1 280px;
     max-width: 350px;
     min-width: 250px;
     text-align: center;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
   }
   
-  .stat-icon { font-size: 3.5rem; margin-bottom: 15px; display: block; margin: 0 auto 15px; }
-  .stat-number { font-size: 3rem; font-weight: 900; color: var(--primary-blue); margin: 0; line-height: 1; }
-  .stat-card p { color: #64748b; font-weight: 700; margin-top: 10px; font-size: 1.1rem; }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(255, 214, 10, 0.5);
+    box-shadow: 
+      0 20px 60px rgba(255, 214, 10, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+  
+  .stat-card:hover::before {
+    opacity: 1;
+  }
+  
+  .stat-icon { 
+    font-size: 3.5rem; 
+    margin-bottom: 20px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--accent-yellow);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    transition: transform 0.4s ease;
+  }
+  
+  .stat-card:hover .stat-icon {
+    transform: scale(1.1) rotate(5deg);
+  }
+  
+  .stat-number { 
+    font-size: 3.5rem; 
+    font-weight: 900; 
+    color: white; 
+    margin: 0; 
+    line-height: 1;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(135deg, #ffffff 0%, var(--accent-yellow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .stat-card p { 
+    color: rgba(255, 255, 255, 0.9); 
+    font-weight: 600; 
+    margin-top: 15px; 
+    font-size: 1.1rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
 
   /* --- NUEVOS ESTILOS: TARJETA DE ENTRENADORES --- */
   .trainers-box {
-    background-color: white;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: 20px;
-    border: 3px solid var(--dark-blue);
-    box-shadow: 10px 10px 0px var(--primary-blue);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     display: flex;
     overflow: hidden;
     max-width: 1100px;
-    /* IMPORTANTE: Altura fija solo para PC */
     height: 400px;
     margin: 0 auto;
     flex-direction: row;
+    position: relative;
+    z-index: 1;
   }
 
   .trainer-img-container {
     flex: 1;
     min-width: 300px;
-    border-right: 3px solid var(--dark-blue);
+    border-right: 2px solid rgba(255, 255, 255, 0.2);
   }
   .trainer-img-container img {
     width: 100%;
@@ -444,8 +820,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-image: radial-gradient(#e0f2fe 1px, transparent 1px);
-    background-size: 20px 20px;
+    background: rgba(255, 255, 255, 0.05);
   }
 
   .trainer-info h3 {
@@ -454,36 +829,18 @@
     font-size: 1.8rem;
     margin-top: 0;
     margin-bottom: 15px;
-    text-align: center; /* Título centrado */
   }
-
-  /* CLASE PARA DESCRIPCION (JUSTIFICADA) */
-  .trainer-desc {
-    text-align: justify;
+  .trainer-info p {
     font-size: 1.1rem;
     line-height: 1.6;
     color: #334155;
     margin-bottom: 20px;
   }
-
-  /* CLASE PARA LISTA (ALINEADA A IZQUIERDA) */
-  .trainer-list {
-    text-align: left;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: #334155;
-    margin-bottom: 20px;
-    padding-left: 20px; /* Un poco de sangría para que se vea ordenado */
-  }
-
   .trainer-quote {
     font-weight: 900;
     color: var(--primary-blue);
     font-style: italic;
     font-size: 1.2rem;
-    display: block;
-    margin-bottom: 5px;
-    text-align: left; /* Títulos pequeños a la izquierda */
   }
 
 
@@ -537,15 +894,189 @@
   @keyframes scroll-infinito { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-33.33% - 15px)); } }
 
   /* FOOTER */
-  .footer { background-color: var(--dark-blue); color: #cbd5e1; padding: 60px 5% 30px; border-top: 1px solid rgba(255,255,255,0.1); }
-  .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; max-width: 1200px; margin: 0 auto; }
-  .footer h3 { color: var(--accent-yellow); margin-bottom: 25px; font-weight: 700; font-size: 1.3rem; }
-  .footer p { margin-bottom: 15px; line-height: 1.6; }
+  .footer { 
+    background-color: var(--dark-blue); 
+    color: #cbd5e1; 
+    position: relative;
+    padding-top: 0;
+  }
   
-  .ig-link { display: inline-block; transition: transform 0.3s ease; }
-  .ig-link:hover { transform: scale(1.1); }
-  .ig-icon { width: 100px; height: auto; display: block; }
-  .footer-bottom { margin-top: 60px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 0.9rem; opacity: 0.6; }
+  .wave-separator {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+    margin-bottom: -1px;
+  }
+  
+  .wave-separator svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 80px;
+    color: var(--dark-blue);
+  }
+  
+  .footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 5% 30px;
+  }
+  
+  .footer-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 50px; 
+    margin-bottom: 40px;
+  }
+  
+  .footer h3 { 
+    color: var(--accent-yellow); 
+    margin-bottom: 25px; 
+    font-weight: 900; 
+    font-size: 1.4rem;
+    font-family: "Candal", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .footer p { 
+    margin-bottom: 15px; 
+    line-height: 1.8;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  :global(.footer .inline-icon) {
+    color: var(--accent-yellow);
+    flex-shrink: 0;
+  }
+  
+  .phone-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .phone-link {
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-weight: 600;
+  }
+  
+  .phone-link:hover {
+    color: var(--accent-yellow);
+  }
+  
+  .btn-whatsapp-footer {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    width: fit-content;
+  }
+  
+  .btn-whatsapp-footer:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+    background: linear-gradient(135deg, #128c7e 0%, #25d366 100%);
+  }
+  
+  .ig-link { 
+    display: inline-block; 
+    transition: transform 0.4s ease, filter 0.3s ease;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  }
+  
+  .ig-link:hover { 
+    transform: scale(1.15) rotate(3deg);
+    filter: drop-shadow(0 6px 12px rgba(255, 214, 10, 0.4));
+  }
+  
+  .ig-icon { 
+    width: 100px; 
+    height: auto; 
+    display: block;
+  }
+  
+  .social-text {
+    margin-top: 15px;
+    font-weight: 600;
+    color: var(--accent-yellow);
+    font-size: 1.1rem;
+  }
+  
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .footer-logo {
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 50%;
+    border: 3px solid var(--accent-yellow);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease;
+  }
+  
+  .footer-logo:hover {
+    transform: scale(1.05) rotate(5deg);
+    border-color: white;
+    box-shadow: 0 0 30px rgba(255, 214, 10, 0.5);
+  }
+  
+  .footer-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  .brand-text {
+    font-family: "Candal", sans-serif;
+    font-size: 1.3rem;
+    color: white;
+    margin: 0;
+    font-weight: 700;
+  }
+  
+  .brand-subtitle {
+    font-size: 0.95rem;
+    color: var(--accent-yellow);
+    font-weight: 600;
+    font-style: italic;
+    margin: 0;
+  }
+  
+  .footer-bottom { 
+    margin-top: 60px; 
+    padding-top: 30px; 
+    border-top: 2px solid rgba(255, 214, 10, 0.2); 
+    text-align: center; 
+    font-size: 0.9rem; 
+    opacity: 0.8;
+  }
 
   /* AJUSTES CELULAR */
   @media (max-width: 600px) {
@@ -571,21 +1102,12 @@
     }
     .trainer-img-container {
         border-right: none;
-        border-bottom: 3px solid var(--dark-blue);
+        border-bottom: 2px solid rgba(255, 255, 255, 0.2);
         height: 250px;
     }
     .trainer-info {
         padding: 25px;
-        /* Quitamos text-align center general para que respeten las clases específicas */
-        text-align: left; 
-    }
-    
-    /* Aseguramos que en celular se mantenga la justificación y alineación */
-    .trainer-desc {
-        text-align: justify;
-    }
-    .trainer-list {
-        text-align: left;
+        text-align: center;
     }
 
     /* --- LOGROS MÁS PEQUEÑOS EN CELULAR --- */
@@ -614,6 +1136,42 @@
 
     .stat-card p {
       font-size: 0.9rem;      
+    }
+    
+    /* Footer responsive */
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    
+    .footer-brand {
+      order: -1;
+    }
+    
+    .phone-section {
+      align-items: flex-start;
+    }
+    
+    /* Video responsive */
+    .video-section {
+      padding: 40px 15px;
+      border-radius: 20px;
+    }
+    
+    .section-title-videos {
+      font-size: 2rem;
+    }
+    
+    .video-grid {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+    
+    .video-label {
+      font-size: 0.8rem;
+      padding: 6px 16px;
+      top: 15px;
+      left: 15px;
     }
   }
 </style>
