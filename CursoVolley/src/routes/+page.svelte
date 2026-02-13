@@ -18,7 +18,8 @@
     { type: 'image', src: '/Imagen11.webp', caption: "12/08/2024: 2da Edición Campeonato de legovolley" },
   ];
 
-  const carouselItems = [...itemsBase, ...itemsBase, ...itemsBase];
+  // Aumentamos a 10 repeticiones para cubrir resoluciones ultra-anchas o zoom-out agresivo
+  const carouselItems = Array(10).fill(itemsBase).flat();
   
   // Mensaje personalizado para WhatsApp
   const mensajeWA = encodeURIComponent("Hola, quisiera saber más detalles de su curso");
@@ -287,7 +288,26 @@
         {/each}
       </div>
     </div>
-  </section>
+  <section class="sponsors-section">
+  <div class="container-center">
+    <h2 class="sponsors-title">Nuestros Patrocinadores</h2>
+    
+    <div class="sponsors-flex">
+      <div class="sponsor-card">
+        <span class="sponsor-name">Trofeos los Ídolos</span>
+      </div>
+
+      <a href="https://www.instagram.com/bordadex.ec" target="_blank" rel="noopener noreferrer" class="sponsor-card">
+        <span class="sponsor-name">@todopersonalizalo</span>
+      </a>
+
+      <a href="https://www.instagram.com/todopersonalizalo" target="_blank" rel="noopener noreferrer" class="sponsor-card">
+        <span class="sponsor-name">@bordadex.ec</span>
+      </a>
+    </div>
+
+  </div>
+</section>
 
   <footer id="contacto" class="footer">
     <!-- Separador Wave SVG -->
@@ -341,10 +361,14 @@
         
         <div class="footer-social">
           <h3>Síguenos</h3>
-          <a href="https://www.instagram.com/gladiadores_academiaa/" target="_blank" class="ig-link">
-            <img src="/Instagram.webp" alt="Instagram" class="ig-icon" />
-          </a>
-          <p class="social-text">@gladiadores_academiaa</p>
+          <div class="social-links">
+            <a href="https://www.instagram.com/gladiadores_academiaa/" target="_blank" class="social-link">
+              <img src="/Instagram.webp" alt="Instagram" class="instagram-icon" />
+            </a>
+            <a href="https://www.facebook.com/people/Academia-Gladiadores/61572458251613/" target="_blank" class="social-link">
+              <img src="/LogoFace.webp" alt="Facebook" class="facebook-icon" />
+            </a>
+          </div>
         </div>
         
         <div class="footer-brand">
@@ -662,6 +686,7 @@
     border-top: 0px solid #e2e8f0;
     position: relative;
     overflow: hidden;
+    text-align: center;
   }
   
   .achievements-section::before {
@@ -835,22 +860,79 @@
     line-height: 1.6;
     color: #334155;
     margin-bottom: 20px;
+    text-align: left;
   }
   .trainer-quote {
     font-weight: 900;
     color: var(--primary-blue);
     font-style: italic;
     font-size: 1.2rem;
+    text-align: left;
   }
 
 
   /* CARRUSEL */
   .carousel-section { 
       position: relative; background-color: var(--dark-blue); padding: 80px 0;
-      clip-path: polygon(0 10%, 100% 0, 100% 100%, 0% 100%);
-      margin-top: -50px; 
-      padding-top: 100px; 
-      z-index: 5; 
+      clip-path: polygon(0 1.5%, 100% 0, 100% 100%, 0% 100%);
+      margin-top: -25px; 
+      padding-top: 110px; 
+      z-index: 5;
+      width: 100vw;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
+      overflow: hidden;
+  }
+
+  .sponsors-section {
+    background-color: #f8fafc;
+    margin-top: 40px;
+    padding: 50px 0; /* Un poco más de respiro arriba y abajo */
+    text-align: center;
+    border-bottom: 2px solid #e2e8f0;
+  }
+
+  .sponsors-title {
+    font-size: 1.8rem;
+    font-family: "Candal", sans-serif;
+    color: var(--dark-blue); /* Asumo que tienes esta variable, si no usa #1e3a8a */
+    margin-bottom: 30px;
+  }
+
+  /* Nuevo contenedor Flexbox */
+  .sponsors-flex {
+    display: flex;
+    flex-wrap: wrap; /* Para que bajen a la siguiente línea en celulares */
+    justify-content: center;
+    gap: 40px; /* Separación entre tarjetas */
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* Estilo de cada tarjeta de patrocinador */
+  .sponsor-card {
+    font-size: 10px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 30px;
+    text-decoration: none;
+    color: #475569;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.3s ease; /* Suaviza la animación */
+  }
+
+  /* Efecto al pasar el mouse (Hover) */
+  .sponsor-card:hover {
+    transform: translateY(-5px); /* Se levanta un poquito */
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    border-color: #fbbf24; /* Color amarillo de tu web */
+    color: var(--dark-blue); 
   }
   .section-border-top {
       position: absolute; top: 0; left: 0; width: 100%; height: 10px;
@@ -862,17 +944,25 @@
   .section-header h2 { font-size: 2.5rem; font-family: "Candal", sans-serif; } 
   .underline-yellow { width: 100px; height: 6px; background: var(--accent-yellow); margin: 20px auto; border-radius: 10px; }
 
-  .carousel-track { display: flex; gap: 30px; width: max-content; animation: scroll-infinito 60s linear infinite; }
+  .carousel-track { 
+    display: flex; 
+    gap: 30px; 
+    width: max-content; 
+    animation: scroll-infinito 60s linear infinite; 
+    will-change: transform;
+  }
   .carousel-card { 
-    width: 300px; height: 300px; flex-shrink: 0; 
-    border-radius: 10px; overflow: hidden; 
+    width: 300px; 
+    height: 300px; 
+    flex-shrink: 0; 
+    border-radius: 12px; 
+    overflow: hidden; 
     border: 4px solid white; 
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    position: relative; /* Para posicionar el texto encima */
+    position: relative;
   }
   .carousel-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
   
-  /* NUEVO: Descripción sobre la imagen del carrusel */
   .carousel-caption {
     position: absolute;
     bottom: 0;
@@ -883,6 +973,7 @@
     padding: 20px 10px 10px;
     box-sizing: border-box;
     text-align: center;
+    z-index: 2;
   }
   .carousel-caption p {
     margin: 0;
@@ -891,14 +982,49 @@
     text-shadow: 1px 1px 2px black;
   }
 
-  @keyframes scroll-infinito { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-33.33% - 15px)); } }
+  @keyframes scroll-infinito { 
+    0% { transform: translateX(0); } 
+    100% { transform: translateX(calc(-10% - 3px)); } 
+  }
+
+  /* Media query específica para el carrusel en móviles */
+  @media (max-width: 768px) {
+    .section-border-top {
+      display: none;
+    }
+    .carousel-section {
+      padding: 120px 0 60px 0;
+      clip-path: polygon(0 40px, 100% 0, 100% 100%, 0% 100%);
+      margin-top: -100px;
+      width: 100vw;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
+    }
+    .section-header {
+      margin-bottom: 30px;
+    }
+    .section-header h2 {
+      font-size: 1.9rem;
+      line-height: 1.3;
+      padding: 0 20px;
+    }
+    .carousel-card {
+      width: 240px;
+      height: 240px;
+    }
+    @keyframes scroll-infinito { 
+      0% { transform: translateX(0); } 
+      100% { transform: translateX(calc(-10% - 3px)); } 
+    }
+  }
 
   /* FOOTER */
   .footer { 
     background-color: var(--dark-blue); 
     color: #cbd5e1; 
     position: relative;
-    padding-top: 0;
   }
   
   .wave-separator {
@@ -921,7 +1047,7 @@
   .footer-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 60px 5% 30px;
+    padding: 40px 5% 0px;
   }
   
   .footer-grid { 
@@ -994,28 +1120,33 @@
     background: linear-gradient(135deg, #128c7e 0%, #25d366 100%);
   }
   
-  .ig-link { 
+  .social-links {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+  
+  .social-link { 
     display: inline-block; 
     transition: transform 0.4s ease, filter 0.3s ease;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
   }
   
-  .ig-link:hover { 
+  .social-link:hover { 
     transform: scale(1.15) rotate(3deg);
     filter: drop-shadow(0 6px 12px rgba(255, 214, 10, 0.4));
   }
   
-  .ig-icon { 
+  .instagram-icon { 
     width: 100px; 
     height: auto; 
     display: block;
   }
-  
-  .social-text {
-    margin-top: 15px;
-    font-weight: 600;
-    color: var(--accent-yellow);
-    font-size: 1.1rem;
+
+  .facebook-icon { 
+    width: 50px; 
+    height: auto; 
+    display: block;
   }
   
   .footer-brand {
