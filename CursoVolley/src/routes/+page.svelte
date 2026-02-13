@@ -297,11 +297,11 @@
         <span class="sponsor-name">Trofeos los Ídolos</span>
       </div>
 
-      <a href="https://www.instagram.com/bordadex.ec" target="_blank" rel="noopener noreferrer" class="sponsor-card">
+      <a href="https://instagram.com/bordadex.ec/" target="_blank" rel="noopener noreferrer" class="sponsor-card">
         <span class="sponsor-name">@todopersonalizalo</span>
       </a>
 
-      <a href="https://www.instagram.com/todopersonalizalo" target="_blank" rel="noopener noreferrer" class="sponsor-card">
+      <a href="https://instagram.com/todopersonalizalo/" target="_blank" rel="noopener noreferrer" class="sponsor-card">
         <span class="sponsor-name">@bordadex.ec</span>
       </a>
     </div>
@@ -362,10 +362,10 @@
         <div class="footer-social">
           <h3>Síguenos</h3>
           <div class="social-links">
-            <a href="https://www.instagram.com/gladiadores_academiaa/" target="_blank" class="social-link">
+            <a href="https://instagram.com/gladiadores_academiaa/" target="_blank" class="social-link">
               <img src="/Instagram.webp" alt="Instagram" class="instagram-icon" />
             </a>
-            <a href="https://www.facebook.com/people/Academia-Gladiadores/61572458251613/" target="_blank" class="social-link">
+            <a href="https://facebook.com/people/Academia-Gladiadores/61572458251613/" target="_blank" class="social-link">
               <img src="/LogoFace.webp" alt="Facebook" class="facebook-icon" />
             </a>
           </div>
