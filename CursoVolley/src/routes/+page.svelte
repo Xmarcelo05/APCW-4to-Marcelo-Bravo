@@ -71,6 +71,26 @@
     }, 16);
   }
 
+  // Función para abrir redes sociales inteligentemente
+  // Función para abrir redes sociales inteligentemente (Versión Anti-Bloqueos)
+  function abrirRedSocial(appUrl: string, webUrl: string) {
+    // 1. Detectar si el usuario está desde un celular (Android o iOS)
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      // 📱 COMPORTAMIENTO EN CELULAR: Intenta abrir la app
+      window.location.href = appUrl;
+      
+      // Si no tiene la app, abre la web después de medio segundo
+      setTimeout(() => {
+        window.location.href = webUrl; // Usamos location.href en vez de window.open para evitar bloqueos en móviles
+      }, 500);
+    } else {
+      // 💻 COMPORTAMIENTO EN PC: Abre la página web directamente al primer clic
+      window.open(webUrl, '_blank');
+    }
+  }
+
   onMount(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -288,6 +308,8 @@
         {/each}
       </div>
     </div>
+  </section>
+
   <section class="sponsors-section">
   <div class="container-center">
     <h2 class="sponsors-title">Nuestros Patrocinadores</h2>
@@ -297,13 +319,17 @@
         <span class="sponsor-name">Trofeos los Ídolos</span>
       </div>
 
-      <a href="https://instagram.com/bordadex.ec/" target="_blank" rel="noopener noreferrer" class="sponsor-card">
+      <button 
+        on:click={() => abrirRedSocial('instagram://user?username=todopersonalizalo', 'https://instagram.com/todopersonalizalo/')} 
+        class="sponsor-card cursor-pointer">
         <span class="sponsor-name">@todopersonalizalo</span>
-      </a>
+      </button>
 
-      <a href="https://instagram.com/todopersonalizalo/" target="_blank" rel="noopener noreferrer" class="sponsor-card">
+      <button 
+        on:click={() => abrirRedSocial('instagram://user?username=bordadex.ec', 'https://instagram.com/bordadex.ec/')} 
+        class="sponsor-card cursor-pointer">
         <span class="sponsor-name">@bordadex.ec</span>
-      </a>
+      </button>
     </div>
 
   </div>
@@ -362,12 +388,19 @@
         <div class="footer-social">
           <h3>Síguenos</h3>
           <div class="social-links">
-            <a href="https://instagram.com/gladiadores_academiaa/" target="_blank" class="social-link">
+            <button 
+              on:click={() => abrirRedSocial('instagram://user?username=gladiadores_academiaa', 'https://instagram.com/gladiadores_academiaa/')} 
+              class="social-link"
+              aria-label="Instagram">
               <img src="/Instagram.webp" alt="Instagram" class="instagram-icon" />
-            </a>
-            <a href="https://facebook.com/people/Academia-Gladiadores/61572458251613/" target="_blank" class="social-link">
+            </button>
+            
+            <button 
+              on:click={() => abrirRedSocial('fb://profile/61572458251613', 'https://facebook.com/people/Academia-Gladiadores/61572458251613/')} 
+              class="social-link"
+              aria-label="Facebook">
               <img src="/LogoFace.webp" alt="Facebook" class="facebook-icon" />
-            </a>
+            </button>
           </div>
         </div>
         
@@ -1126,15 +1159,18 @@
     align-items: center;
   }
   
-  .social-link { 
-    display: inline-block; 
-    transition: transform 0.4s ease, filter 0.3s ease;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  .social-link {
+    background: transparent; /* Quita el fondo gris del botón */
+    border: none;            /* Quita el borde del botón */
+    padding: 0;              /* Quita el espacio interno extra */
+    cursor: pointer;         /* Muestra la manito al pasar el mouse */
+    display: inline-block;
+    transition: transform 0.3s ease; /* (Opcional) para que se mueva al hacer hover */
   }
-  
-  .social-link:hover { 
-    transform: scale(1.15) rotate(3deg);
-    filter: drop-shadow(0 6px 12px rgba(255, 214, 10, 0.4));
+
+  /* Efecto al pasar el mouse */
+  .social-link:hover {
+    transform: scale(1.1); /* Hace que el icono crezca un poquito */
   }
   
   .instagram-icon { 
